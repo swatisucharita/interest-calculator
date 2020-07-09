@@ -1,0 +1,19 @@
+{
+  "name": "interest-calculator",
+  "version": "1.0.0",
+  "description": "INterest calculator with webcomponents and web assembly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "es-dev-server --node-resolve"
+  },
+  "keywords": [
+    "webcomponets"
+  ],
+  "author": "Swati Sucharita",
+  "license": "ISC",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.4.3",
+    "es-dev-server": "^1.56.0"
+  }
+}
