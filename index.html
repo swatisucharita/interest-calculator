@@ -12,9 +12,57 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
   </head>
   <body>
+    <script src="./scripts/wasm_exec.js"></script>
+
+    <script>
+      if (!WebAssembly.instantiateStreaming) {
+        // polyfill
+        WebAssembly.instantiateStreaming = async (resp, importObject) => {
+          const source = await (await resp).arrayBuffer();
+          return await WebAssembly.instantiate(source, importObject);
+        };
+      }
+
+      const go = new Go();
+
+      let mod, inst;
+
+      WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(
+        async result => {
+          mod = result.module;
+          inst = result.instance;
+          await go.run(inst);
+        }
+      );
+    </script>
+    <script src='./scripts/calculatorForm.js'></script>
         <div slot="appContent">
           <div class="main-content">
               <h1>Compound Interest Calculator</h1>
+              <template id="calculator-form-template">
+                <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' />
+                <link rel='stylesheet' href='./scripts/styles.css' />
+                <div>
+                    <form>
+                        <div class="form-group">
+                            <label for="initialBalance">Initial Balance</label>
+                            <input type="number" class="form-control" id="initialBalance" placeholder="10000">
+                        </div>
+                        <div class="form-group">
+                            <label for="interestRate">Interest Rate</label>
+                            <input type="number" class="form-control" id="interestRate" placeholder="%">
+                        </div>
+                        <div class="form-group">
+                            <label for="calculationPeriod">Calculation Period</label>
+                            <input type="number" class="form-control" id="calculationPeriod" placeholder="years">
+                        </div>
+                
+                        <button id="calculateButton" type="submit" class="btn btn-primary">Calculate</button>
+                        <div id="result" style="margin: 10px 0;"></div>
+                    </form>
+                </div>
+              </template>
+              <calculator-form />
           </div>
         </div>
   </body>
